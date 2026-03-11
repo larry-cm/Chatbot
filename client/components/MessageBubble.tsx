@@ -24,9 +24,9 @@ export function MessageBubble({ message }: Props) {
             )}
 
             <div
-                className={`max-w-[85%] md:max-w-[75%] px-4 py-3 rounded-2xl text-sm md:text-base leading-relaxed whitespace-pre-wrap break-words shadow-sm transition-all duration-300 ${isUser
-                    ? "bg-[#2f2f2f] text-white rounded-tr-none border border-white/5"
-                    : "bg-[#1e1e1e] text-gray-100 rounded-tl-none border border-white/5"
+                className={`max-w-[85%] md:max-w-[75%] px-4 py-3 rounded-2xl text-sm md:text-base leading-relaxed whitespace-pre-wrap wrap-break-word shadow-sm transition-all duration-300 ${isUser
+                    ? "bg-background text-white rounded-tr-none border border-white/5"
+                    : "bg-background text-gray-100 rounded-tl-none border border-white/5"
                     }`}
             >
                 {message.content}

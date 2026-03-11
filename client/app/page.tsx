@@ -49,7 +49,7 @@ export default async function Home() {
 
   const isError = initialMessages === null;
   return (
-    <main className="h-screen bg-[#212121]">
+    <main className="h-screen bg-background">
       <ChatWindow
         isErrorConexion={isError}
         initialMessages={initialMessages ?? []}

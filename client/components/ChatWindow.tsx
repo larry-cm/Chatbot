@@ -96,6 +96,7 @@ export function ChatWindow({ initialMessages, initialConversations, initialSessi
         if (!text || !userId || isLoading) return;
 
         const userMsg: Message = { role: "user", content: text };
+
         setMessages((prev) => [...prev, userMsg]);
         setInput("");
         setIsLoading(true);
@@ -136,7 +137,7 @@ export function ChatWindow({ initialMessages, initialConversations, initialSessi
     const isEmpty = messages.length === 0 && !isInitializing && !connectionError;
 
     return (
-        <div className="flex h-full w-full overflow-hidden bg-[#212121]">
+        <div className="flex h-full w-full overflow-hidden bg-background">
             <Sidebar
                 conversations={conversations}
                 activeId={activeConvId}
@@ -148,7 +149,7 @@ export function ChatWindow({ initialMessages, initialConversations, initialSessi
 
             <section className="flex-1 flex flex-col h-full min-w-0 relative">
                 {/* Header inside ChatWindow for mobile toggle control */}
-                <header className="flex items-center px-4 py-3 border-b border-white/5 shrink-0 z-20 bg-[#212121]/80 backdrop-blur-md sticky top-0">
+                <header className="flex items-center px-4 py-3 border-b border-white/5 shrink-0 z-20 bg-background/80 backdrop-blur-md sticky top-0">
                     <button
                         onClick={() => setIsSidebarOpen(true)}
                         className="md:hidden p-2 -ml-2 mr-2 text-gray-400 hover:text-white transition-colors"
@@ -238,7 +239,7 @@ export function ChatWindow({ initialMessages, initialConversations, initialSessi
                 </article>
 
                 {/* Input area */}
-                <article className="pb-4 md:pb-8 pt-2 bg-linear-to-t from-[#212121] via-[#212121] to-transparent z-10">
+                <article className="pb-4 md:pb-8 pt-2 bg-background z-10">
                     <div className="max-w-3xl mx-auto px-4">
                         <ChatInput
                             value={input}
