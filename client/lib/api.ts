@@ -66,3 +66,14 @@ export async function sendMessage(
     if (!res.ok) throw new Error("Error al enviar el mensaje");
     return res.json();
 }
+
+export async function deleteConversation(userId: string, conversationId: string): Promise<void> {
+    const res = await fetch("/api/conversations", {
+        method: "DELETE",
+        headers: {
+            "x-session-id": userId,
+            "x-conversation-id": conversationId,
+        },
+    });
+    if (!res.ok) throw new Error("Error al eliminar la conversación");
+}

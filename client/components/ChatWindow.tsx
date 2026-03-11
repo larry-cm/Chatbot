@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { MessageBubble } from "@/components/MessageBubble";
 import { ChatInput } from "@/components/ChatInput";
 import { Sidebar } from "@/components/Sidebar";
-import { initSession, sendMessage, fetchHistory, fetchConversations, type Message, type Conversation } from "@/lib/api";
+import { initSession, sendMessage, fetchHistory, fetchConversations, type Message, type Conversation, deleteConversation } from "@/lib/api";
 
 const CONNECTION_ERROR = "No se puede conectar con el servidor. Asegúrate de que esté en ejecución.";
 const SESSION_COOKIE = "x-session-id";
@@ -85,6 +85,20 @@ export function ChatWindow({ initialMessages, initialConversations, initialSessi
             setIsLoading(false);
         }
     }, [userId, activeConvId]);
+    // Delete conversation
+    const handleDeleteConversation = useCallback(async (id: string) => {
+        if (!userId) return;
+        try {
+            await deleteConversation(userId, id);
+            setConversations((prev) => prev.filter(c => c.id !== id));
+            if (id === activeConvId) {
+                setActiveConvId(null);
+                setMessages([]);
+            }
+        } catch (err) {
+            setConnectionError("Error al eliminar la conversación.");
+        }
+    }, [userId, activeConvId]);
 
     // Auto-scroll to the latest message
     useEffect(() => {
@@ -141,9 +155,10 @@ export function ChatWindow({ initialMessages, initialConversations, initialSessi
             <Sidebar
                 conversations={conversations}
                 activeId={activeConvId}
-                onSelect={handleSelectConversation}
-                onNewChat={handleNewChat}
                 isOpen={isSidebarOpen}
+                onNewChat={handleNewChat}
+                onSelect={handleSelectConversation}
+                onDelete={handleDeleteConversation}
                 onClose={() => setIsSidebarOpen(false)}
             />
 
