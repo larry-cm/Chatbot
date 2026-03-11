@@ -1,6 +1,6 @@
 import { serviceGroq, generateTitle } from "@/services/ia/groq";
 import { CORS_HEADERS } from "@/utilities/cors";
-import { getMessagesInitial, getHistoryChat, setHistoryCloud, getUserConversations } from '@/utilities/promptsAssist';
+import { getMessagesInitial, getHistoryChat, setHistoryCloud, getUserConversations, deleteConversation } from '@/utilities/promptsAssist';
 
 export const OPCION_FAIL = new Response(JSON.stringify({
     message: "Fallo la peticion a la ruta",
@@ -125,6 +125,19 @@ const conversations = {
 
         const userConvs = await getUserConversations(userId);
         return new Response(JSON.stringify({ conversations: userConvs }), { headers: CORS_HEADERS });
+    },
+    "DELETE": async (req: Request) => {
+        const userId = req.headers.get('x-session-id');
+        const conversationId = req.headers.get('x-conversation-id');
+
+        if (!userId || !conversationId) {
+            return new Response(JSON.stringify({
+                message: "Se requiere x-session-id y x-conversation-id"
+            }), { status: 400, headers: CORS_HEADERS });
+        }
+
+        await deleteConversation(userId, conversationId);
+        return new Response(JSON.stringify({ message: "Conversación eliminada" }), { headers: CORS_HEADERS });
     }
 }
 

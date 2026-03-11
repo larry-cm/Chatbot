@@ -1,13 +1,14 @@
 import { db } from "@/db/firebase"
+import { FieldValue } from "firebase-admin/firestore"
 const COLLECTION_NAME = {
     conversaciones: "conversaciones",
     inicio: "memoria-inicio"
 }
 
 export const getMessagesInitial = async () => {
-
     const snapshot = await db.collection(COLLECTION_NAME.inicio).get()
     const res: string[] = []
+
     snapshot.forEach((doc) => {
         res.push(Object.values(doc.data()).join(", "))
     });
@@ -50,7 +51,6 @@ export const setHistoryCloud = async (
     title?: string
 ) => {
     const docRef = db.collection(COLLECTION_NAME.conversaciones).doc(userId)
-
     const updateData: any = {
         [`${conversationId}.messages`]: history,
         [`${conversationId}.lastUpdate`]: Date.now()
@@ -77,4 +77,13 @@ export const setHistoryCloud = async (
     })
 
     return true
+}
+
+export const deleteConversation = async (userId: string, conversationId: string) => {
+    const docRef = db.collection(COLLECTION_NAME.conversaciones).doc(userId)
+
+    await docRef.update({
+        [conversationId]: FieldValue.delete()
+    })
+
 }
